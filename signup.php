@@ -42,7 +42,7 @@ if (isset($_SESSION['user_id'])) {
                         <label for="InputProfilePicture" style="display: block; height: 100%; cursor: pointer; ">
                             <input type="file" accept="image/*" name="image" id="InputProfilePicture" style="display: none;">
                             
-                            <img id="displayImage" src="assets/images/add-image.png"  style="cursor: pointer; border-radius: 50%; backdrop-filter: blur(50px); background-color: rgba(0, 0, 0, 0); object-fit: contain; height: 100%; width: 100%; vertical-align: middle;" title="Profile Picture">
+                            <img id="displayImage" src="assets/images/add-image.png"  style="cursor: pointer; border-radius: 50%; backdrop-filter: blur(50px); background-color: rgba(0, 0, 0, 0); object-fit: contain; height: 100%; width: 100%; vertical-align: middle;" title="Profile Picture. Limited to 1MB.">
                         </label>
                     </div>
 

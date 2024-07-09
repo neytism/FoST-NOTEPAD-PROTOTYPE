@@ -101,7 +101,7 @@ if (isset($_GET['logout'])) {
             
             <div class="col-lg-3 col-md-12 mb-0 mb-lg-0" id="note-card-holder-1">
 
-                <div class="w-100 shadow-1-strong rounded-card mb-4 note-card" >
+                <!-- <div class="w-100 shadow-1-strong rounded-card mb-4 note-card" >
                     
                     <div class="delete-holder">
                         <button class="trash-button">
@@ -115,7 +115,7 @@ if (isset($_GET['logout'])) {
                         </button>
                     </div>
                     
-
+                    
                     <div><span class="note-title" contenteditable="true"></span></div>
 
                     <ul class="list-group bg-transparent">
@@ -144,7 +144,7 @@ if (isset($_GET['logout'])) {
                             <button class="btn btn-dark bg-transparent border-0 p-0 new-list" >&nbsp; Add new item to list. &nbsp;</button>
                         </li>
                       </ul>
-                </div>
+                </div> -->
             
 
             </div>

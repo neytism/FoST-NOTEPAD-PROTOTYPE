@@ -94,7 +94,7 @@ if (!empty($image['name'])) {
     $relativeFilePath = $base_dir . $newFileName;
 
 
-    if ($image["size"] > 5000000) {
+    if ($image["size"] > 1000000) {
         $errors['image'] = '-File is too large';
     }
 
