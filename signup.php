@@ -61,10 +61,10 @@ if (isset($_SESSION['user_id'])) {
                 <form method="post" action="signupAction.php">
                     
                     <div class="form-group d-flex  mt-4 mb-4" style="height: 200px; max-height: 200px; text-align: center;" >
-                        <label for="InputProfilePicture" style="display: block; cursor: pointer; ">
+                        <label for="InputProfilePicture" style="display: block; cursor: pointer; aspect-ratio: 1 / 1 ;">
                             <input type="file" accept="image/*" name="image" id="InputProfilePicture" style="display: none;">
                             
-                            <img id="displayImage" src="assets/images/add-image.png"  style="cursor: pointer; border-radius: 50%; backdrop-filter: blur(50px); background-color: rgba(0, 0, 0, 0); object-fit: contain; width: 100%; max-width: 200px ;vertical-align: middle;" title="Optional Profile Picture. Limited to 1MB.">
+                            <img id="displayImage" src="assets/images/test.png"  style="cursor: pointer; border-radius: 50%; backdrop-filter: blur(50px); background-color: rgba(0, 0, 0, 0); object-fit: cover; width: 100%; max-width: 200px ; height: 100%; max-height: 200px; vertical-align: middle;" title="Optional Profile Picture. Limited to 1MB.">
                         </label>
                     </div>
                     

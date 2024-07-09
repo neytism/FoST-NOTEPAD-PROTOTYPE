@@ -198,10 +198,10 @@ $conn->close();
                 <form method="post">
 
                      <div class="form-group d-flex  mt-4 mb-4" style="height: 200px; max-height: 200px; text-align: center;" >
-                        <label for="InputProfilePicture" style="display: block; cursor: pointer; ">
-                            <input type="file" accept="image/*" name="image" id="InputProfilePicture" style="display: none;">
+                        <label for="InputProfilePicture" style="display: block; cursor: pointer; aspect-ratio: 1 / 1 ; ">
+                            <input type="file" accept="image/*" name="image" id="InputProfilePicture" style="display: none; ">
                             
-                            <img id="displayImage" src="assets/images/<?php echo htmlspecialchars($image_name) ?>"  style="cursor: pointer; border-radius: 50%; backdrop-filter: blur(50px); background-color: rgba(0, 0, 0, 0); object-fit: contain; width: 100%; max-width: 200px ;vertical-align: middle;" title="Profile Picture. Limited to 1MB.">
+                            <img id="displayImage" src="assets/images/<?php echo htmlspecialchars($image_name) ?>"  style="cursor: pointer; border-radius: 50%; backdrop-filter: blur(50px); background-color: rgba(0, 0, 0, 0); object-fit: cover; width: 100%; max-width: 200px ; height: 100%; max-height: 200px;vertical-align: middle;" title="Profile Picture. Limited to 1MB.">
                         </label>
                     </div>
                 
