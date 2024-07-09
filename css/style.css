@@ -1,0 +1,305 @@
+:root {
+    --gradient1-position: top left;
+    --gradient1-color1: rgb(75, 24, 24);
+    --gradient1-color2: rgba(225, 243, 97, 0);
+    --gradient1-size: circle farthest-corner;
+    --gradient1-size-percentage: 50%;
+  
+    --gradient2-position: top right;
+    --gradient2-color1: rgba(168, 59, 144, 0.247);
+    --gradient2-color2: rgba(181, 176, 177, 0);
+    --gradient2-size: circle farthest-side;
+    --gradient2-size-percentage: 50%;
+  
+    --gradient3-position: bottom right;
+    --gradient3-color1: rgb(31, 15, 70);
+    --gradient3-color2: rgba(204, 104, 119, 0);
+    --gradient3-size: circle farthest-corner;
+    --gradient3-size-percentage: 63%;
+  
+    --gradient4-position: top right;
+    --gradient4-color1: rgb(32, 38, 43);
+    --gradient4-color2: rgba(155, 221, 240, 0);
+    --gradient4-size: circle farthest-corner;
+    --gradient4-size-percentage: 50%;
+  
+    --gradient5-position: bottom center;
+    --gradient5-color1: rgb(94, 40, 73);
+    --gradient5-color2: rgba(0, 0, 0, 0);
+    --gradient5-size: ellipse;
+    --gradient5-size-percentage: 80%;
+  
+    --gradient6-position: bottom left;
+    --gradient6-color1: rgb(58, 31, 88);
+    --gradient6-color2: rgba(0, 0, 0, 0);
+    --gradient6-size: ellipse;
+    --gradient6-size-percentage: 80%;
+  }
+  
+.gradient-background {
+    position: fixed;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    background-color: #000000;
+    background-image: radial-gradient(
+        var(--gradient1-size) at var(--gradient1-position),
+        var(--gradient1-color1) 0%,
+        var(--gradient1-color2) var(--gradient1-size-percentage)
+        ),
+        radial-gradient(
+        var(--gradient2-size) at var(--gradient2-position),
+        var(--gradient2-color1) 0%,
+        var(--gradient2-color2) var(--gradient2-size-percentage)
+        ),
+        radial-gradient(
+        var(--gradient3-size) at var(--gradient3-position),
+        var(--gradient3-color1) 0%,
+        var(--gradient3-color2) var(--gradient3-size-percentage)
+        ),
+        radial-gradient(
+        var(--gradient4-size) at var(--gradient4-position),
+        var(--gradient4-color1) 0%,
+        var(--gradient4-color2) var(--gradient4-size-percentage)
+        ),
+        radial-gradient(
+        var(--gradient5-size) at var(--gradient5-position),
+        var(--gradient5-color1) 0%,
+        var(--gradient5-color2) var(--gradient5-size-percentage)
+        ),
+        radial-gradient(
+        var(--gradient6-size) at var(--gradient6-position),
+        var(--gradient6-color1) 0%,
+        var(--gradient6-color2) var(--gradient6-size-percentage)
+        );
+
+        background-size: 200% 200%;
+        animation: gradientAnimationCHAOTIC 60s ease infinite;
+}
+
+@keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  @keyframes gradientAnimationCHAOTIC {
+    0% {
+      background-position: 0% 50%;
+    }
+    10% {
+      background-position: 10% 90%;
+    }
+    20% {
+      background-position: 40% 10%;
+    }
+    30% {
+      background-position: 70% 90%;
+    }
+    40% {
+      background-position: 100% 50%;
+    }
+    50% {
+      background-position: 70% 10%;
+    }
+    60% {
+      background-position: 40% 90%;
+    }
+    70% {
+      background-position: 10% 50%;
+    }
+    80% {
+      background-position: 40% 10%;
+    }
+    90% {
+      background-position: 70% 90%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+
+html {
+height: 100%;
+}
+
+body {
+margin: 0;
+height: 100%;
+}
+
+.navbar {
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(200px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.158);
+  }
+
+body::-webkit-scrollbar{
+    display: none;
+}
+
+.rounded-card{
+    border-radius:  12.5px !important;
+}
+
+.note-card{
+    background-color: rgba(255, 255, 255, 0.062);
+    backdrop-filter: blur(200px);
+    border: 1px solid rgba(255, 255, 255, 0.39);
+    min-height: 100px;
+    padding: 15px;
+    color: white;
+    transition: 0.3s ease;
+}
+
+.note-card:hover{
+    border: 1px solid rgba(255, 255, 255, 0.911);
+    transition: 0.3s ease;
+}
+
+.new-note{
+    background-color: rgba(255, 255, 255, 0.062);
+    backdrop-filter: blur(400px);
+    border: 1px solid rgba(255, 255, 255, 0.39);
+    min-height: 50px;
+    padding: 10px;
+    color: white;
+}
+
+.new-note > input{
+    color: white
+}
+
+.new-note > input::placeholder{
+    color: rgba(255, 255, 255, 0.425)
+}
+
+.new-note > input:focus{
+    color: rgb(255, 255, 255);
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0);
+} 
+
+.list-group > li{
+    padding-top: 2.5px;
+    padding-bottom: 2.5px;
+}
+
+span:focus, .list-group-item > button:focus, .delete-holder button:focus, .add-button:focus{
+    color: rgb(255, 255, 255);
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0);
+}
+
+
+.list-group {
+    padding-top: 15px;
+}
+
+.checked{
+    text-decoration: line-through !important; 
+    opacity: 0.3;
+}
+
+.inactive{
+
+    opacity: 0.5;
+}
+
+.hide{
+    display: none !important;
+}
+
+.text-after-checkbox {
+    padding-left: 0.5em; 
+  }
+
+span[contenteditable]:empty::before {
+    color: rgba(255, 255, 255, 0.425);
+    content: 'New Item';
+    display: inline-block;
+}
+span[contenteditable]:empty:focus::before {
+    content: 'Enter note';
+}
+
+.note-title[contenteditable]:empty::before {
+    color: rgba(255, 255, 255, 0.425);
+    content: 'Note Title';
+    display: inline-block;
+}
+
+.note-title[contenteditable]:empty:focus::before {
+    content: 'Enter Title';
+}
+
+.delete-holder{
+    padding-bottom: 30px;
+    padding-left: 30px;
+    margin-top: -10px;
+    margin-right: -10px;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    
+}
+
+.delete-holder button{
+    border-radius: 35px;
+    font-size: 1rem;
+    color: white;
+    background-color: rgb(109, 18, 18);
+    height: 30px;
+    width: 30px;
+    z-index: 50;
+    border: 1px solid rgba(255, 255, 255, 0.411);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.button-i{
+    height: 100%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+
+.delete-holder:hover button,
+.delete-holder:focus-within button {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#InputPassword, #InputUsername, #InputBio, #InputName, #InputRepeatPassword {
+    color: white;
+  }
+  
+  #InputPassword::placeholder, #InputUsername::placeholder, #InputBio::placeholder, #InputName::placeholder ,#InputRepeatPassword::placeholder{
+    color: rgba(255, 255, 255, 0.425);
+  }
+  
+  #InputPassword:focus, #InputUsername:focus, #InputBio:focus, #InputName:focus , #InputRepeatPassword:focus{
+    color: rgb(255, 255, 255);
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0);
+  }
+  
+
+.btn-primary{
+    background-color: rgba(168, 59, 144, 0.767) !important;
+    border: none !important;
+}
+
+.btn-secondary{
+    background-color: rgba(116, 116, 116, 0.212) !important;
+    border: none !important;
+}
