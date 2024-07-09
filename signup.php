@@ -39,7 +39,7 @@ if (isset($_SESSION['user_id'])) {
         display: none;
         }
         
-        .form-group.d-flex {
+        .form-group.d-flex, #warningText {
   justify-content: center;
 }
     </style>
@@ -99,8 +99,8 @@ if (isset($_SESSION['user_id'])) {
                     <button type="button" class="btn btn-secondary col-12 mb-3" onclick="window.location.href='login.php'">Already have an account.</button>
 
                     <button type="button" class="btn btn-primary col-12" onclick="checkSignup(event)">Sign up</button>
-
-                    <label class="mt-3 d-flex justify-content-center text-danger" id="warningText" style="display: none !important;"></label>
+                    
+                    <label class="mt-3 d-flex text-danger" id="warningText" style="display: none !important; text-align:center;">-Username is required.<br>-Name is required<br>-Password is required.</label>
                   </form>
             </div>
         

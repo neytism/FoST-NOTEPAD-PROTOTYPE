@@ -149,7 +149,7 @@ $conn->close();
         display: none;
         }
         
-        .form-group.d-flex {
+        .form-group.d-flex,  #warningText {
   justify-content: center;
 }
     </style>
@@ -220,7 +220,7 @@ $conn->close();
                         <textarea class="form-control bg-transparent" aria-label="With textarea" name="bio" id="InputBio" placeholder="Enter Bio" ><?php echo htmlspecialchars($bio) ?></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary col-12" onclick="checkUpdate(event)">Save Changes</button>
-                    <label class="mt-3 d-flex justify-content-center text-danger" id="warningText" style="display: none !important;"></label>
+                    <label class="mt-3 d-flex text-danger" id="warningText" style="display: none !important; text-align:center;"></label>
                   </form>
             </div>
         
