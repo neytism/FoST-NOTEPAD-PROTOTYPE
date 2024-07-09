@@ -32,7 +32,8 @@ if ($id == '-1') {
 
     $sql = "INSERT INTO notes(id, user_id, title, content, is_archived) VALUES('$id','$user_id','$title','$content','$isArchived')";
 } else {
-    $sql = "UPDATE notes SET title='$title', content= '$content', is_archived = '$isArchived' WHERE id = '$id'";
+    $sql = "UPDATE notes SET title='$title', content= '$content', is_archived = '$isArchived' , timestamp = current_timestamp WHERE id = '$id'";
+
 }
 
 mysqli_query($conn, $sql);

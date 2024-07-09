@@ -1,7 +1,11 @@
 <?php
 include 'config.php';
 
-$sql = "SELECT id, title, content, is_archived FROM notes WHERE user_id = '$_SESSION[user_id]' ";
+$sql = "SELECT id, title, content, is_archived, timestamp 
+        FROM notes 
+        WHERE user_id = '$_SESSION[user_id]'
+        ORDER BY timestamp ASC";
+
 
 $result = mysqli_query($conn, $sql);
 

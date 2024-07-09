@@ -46,25 +46,7 @@
 
     <div class="hide-scroll" style="padding: 20px;">
 
-        <button
-        style="
-        margin: 25px;
-        border-radius: 35px;
-        text-align: center;
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        font-size: 2rem;
-        color: white;
-        background-color: rgba(255, 255, 255, 0.062);
-        height: 70px;
-        width: 70px;
-        z-index: 100;
-        backdrop-filter: blur(5px);
-        border: 1px solid rgba(255, 255, 255, 0.411);"
-        class="shadow"
-        title="Add new Note"
-        onclick="addNewNote()" class="add-button"><i class="bi bi-plus-lg button-i"></i></button>
+        
 
         <!-- Gallery -->
         <div class="row">

@@ -25,7 +25,7 @@ function checkIfNoNotes(){
 
 function addNewNote(){
     
-    addTimer(generateNewNoteCard(-1,"", "")); // fix
+    addTimer(generateNewNoteCard(-1,"", "true")); // fix
     
     checkIfNoNotes();
 }
@@ -78,10 +78,11 @@ function moveToNextHolder(noteCard) {
 
 
 //pamagat is title, but is taken so fuck it
-function generateNewNoteCard(id, pamagat){
+function generateNewNoteCard(id, pamagat, isArchived){
     const noteCard = document.createElement('div');
     noteCard.classList.add('w-100', 'shadow-1-strong', 'rounded-card', 'mb-4', 'note-card');
     noteCard.setAttribute("card-id", id );
+    noteCard.setAttribute("is-archived", isArchived );
     
     const deleteHolder = document.createElement('div');
     deleteHolder.classList.add('delete-holder');
@@ -199,6 +200,24 @@ function removeList(event, item, span) {
 
 function deleteNote(noteCard) {
     noteCard.classList.toggle('hide');
+
+    var isArchived = noteCard.getAttribute("is-archived");
+    var id = noteCard.getAttribute("card-id");
+
+    let formData = new FormData();
+    formData.append('id', id);
+    formData.append('isArchived', isArchived);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'archiveNoteAction.php', true);
+    xhr.onload = function () {
+
+        noteCard.setAttribute("is-archived", this.responseText);
+    };
+
+    xhr.send(formData);
+
+
     checkIfNoNotes();
 }
 
@@ -220,7 +239,7 @@ function fetchNotes(pageName) {
                 console.log(id + " " + title + " " + content);
             
                 if (pageName === "index" && isArchived == "false") {
-                    var newNoteCard = generateNewNoteCard(id, title, content);
+                    var newNoteCard = generateNewNoteCard(id, title, isArchived);
                     
                     var listItems = content.split(' | ');
                     listItems.forEach(function (item) {
@@ -234,7 +253,7 @@ function fetchNotes(pageName) {
                 }
                 
                 if (pageName === "archived" && isArchived == "true") {
-                    var newNoteCard = generateNewNoteCard(id, title, content);
+                    var newNoteCard = generateNewNoteCard(id, title, isArchived);
                     
                     var listItems = content.split(' | ');
                     listItems.forEach(function (item) {
@@ -312,7 +331,7 @@ function addTimer(noteCard) {
             xhr.send(formData);
 
             
-        }, 5000);
+        }, 5000); 
     }
 
     function resetSaveTimer() {
