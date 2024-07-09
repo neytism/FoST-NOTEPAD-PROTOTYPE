@@ -2,6 +2,14 @@
 include 'config.php';
 
 $id = $_POST['id'];
+
+if(isset($_POST['isRecover'])){
+    $sql = "UPDATE notes SET is_archived = 'false' WHERE id = '$id'";
+    mysqli_query($conn, $sql);
+    echo "false";
+    $conn->close();
+}
+
 $isArchived = $_POST['isArchived'];
 
 $id = mysqli_real_escape_string($conn, $id);

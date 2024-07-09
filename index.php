@@ -101,11 +101,17 @@ if (isset($_GET['logout'])) {
             
             <div class="col-lg-3 col-md-12 mb-0 mb-lg-0" id="note-card-holder-1">
 
-                <!-- <div class="w-100 shadow-1-strong rounded-card mb-4 note-card" >
+                <div class="w-100 shadow-1-strong rounded-card mb-4 note-card" >
                     
                     <div class="delete-holder">
                         <button class="trash-button">
-                            <i class="bi bi-trash3 button-i button-i"></i>
+                            <i class="bi bi-trash3 button-i"></i>
+                        </button>
+                    </div>
+
+                    <div class="recover-holder hide">
+                        <button class="recover-button">
+                            <i class="bi bi-arrow-return-left button-i"></i>
                         </button>
                     </div>
                     
@@ -138,7 +144,7 @@ if (isset($_GET['logout'])) {
                             <button class="btn btn-dark bg-transparent border-0 p-0 new-list" >&nbsp; Add new item to list. &nbsp;</button>
                         </li>
                       </ul>
-                </div> -->
+                </div>
             
 
             </div>

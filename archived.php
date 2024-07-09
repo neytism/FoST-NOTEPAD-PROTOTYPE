@@ -61,7 +61,7 @@
             <div class=" col-lg-12 col-md-12 mb-1 mb-lg-0 d-flex justify-content-center">
                 
                 <div id="no-notes-found" class="w-100 col-lg-12 shadow-1-strong rounded-card mb-4 new-note inactive hide" style="text-align: center;" >
-                    NO NOTES FOUND
+                    NO ARCHIVED NOTES FOUND
                 </div>
 
             </div>
