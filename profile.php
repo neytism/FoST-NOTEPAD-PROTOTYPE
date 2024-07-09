@@ -124,6 +124,36 @@ $conn->close();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
     <title>Profile</title>
+
+    <style>
+        .d-flex.justify-content-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        }
+        
+        .note-card {
+        max-height: 95vh;
+        overflow-y: auto;
+        margin-top: 0px; 
+        }
+        
+        @media (max-height: 670px) {
+            .note-card {
+        margin-top: 150px;
+        }
+        }
+        
+        .note-card::-webkit-scrollbar {
+        display: none;
+        }
+        
+        .form-group.d-flex {
+  justify-content: center;
+}
+    </style>
+    
 </head>
 
 
@@ -163,16 +193,18 @@ $conn->close();
 
         <div class="col-lg-4 col-md-12 mb-0 mb-lg-0" id="note-card-holder-1">
                 
-            <div class="w-100 shadow-1-strong rounded-card mb-4 note-card" >
+            <div class="w-100 shadow-1-strong rounded-card note-card" style="">
                 
                 <form method="post">
-                    <div class="form-group d-flex justify-content-center mt-4 mb-4" style="height: 200px;" >
-                        <label for="InputProfilePicture" style="display: block; height: 100%; cursor: pointer; ">
+
+                     <div class="form-group d-flex  mt-4 mb-4" style="height: 200px; max-height: 200px; text-align: center;" >
+                        <label for="InputProfilePicture" style="display: block; cursor: pointer; ">
                             <input type="file" accept="image/*" name="image" id="InputProfilePicture" style="display: none;">
                             
-                            <img id="displayImage" src="assets/images/<?php echo htmlspecialchars($image_name) ?>"  style="cursor: pointer; border-radius: 50%; backdrop-filter: blur(50px); background-color: rgba(0, 0, 0, 0); object-fit: contain; height: 100%; width: 100%; vertical-align: middle;" title="Profile Picture. Limited to 1MB.">
+                            <img id="displayImage" src="assets/images/<?php echo htmlspecialchars($image_name) ?>"  style="cursor: pointer; border-radius: 50%; backdrop-filter: blur(50px); background-color: rgba(0, 0, 0, 0); object-fit: contain; width: 100%; max-width: 200px ;vertical-align: middle;" title="Profile Picture. Limited to 1MB.">
                         </label>
                     </div>
+                
                     <div class="form-group">
                       <label for="InputUsername">Username</label>
                       <input type="text" class="form-control bg-transparent" name="uname" id="InputUsername" aria-describedby="emailHelp" placeholder="Enter username" value="<?php echo htmlspecialchars($username) ?>" readonly required>

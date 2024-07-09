@@ -20,7 +20,29 @@ if (isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
-    <title>Profile</title>
+    <title>Sign up</title>
+
+    <style>
+        .d-flex.justify-content-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        }
+        
+        .note-card {
+        max-height: 95vh;
+        overflow-y: auto;
+        }
+        
+        .note-card::-webkit-scrollbar {
+        display: none;
+        }
+        
+        .form-group.d-flex {
+  justify-content: center;
+}
+    </style>
 </head>
 
 
@@ -30,27 +52,28 @@ if (isset($_SESSION['user_id'])) {
     <div class="gradient-background"></div>
 
    
-    <div class="hide-scroll d-flex justify-content-center align-items-center" style="height: 100%;">
-
-        <div class="col-lg-4 col-md-12 mb-0 mb-lg-0" id="note-card-holder-1">
+    <div class="hide-scroll d-flex justify-content-center" style="height: 100%;">
+        
+        <div class="col-lg-4 col-md-12 mb-0 mb-lg-0" id="note-card-holder-1" >
                 
-            <div class="w-100 shadow-1-strong rounded-card mb-4 note-card" >
+            <div class="w-100 shadow-1-strong rounded-card note-card" >
                 
                 <form method="post" action="signupAction.php">
-
-                    <div class="form-group d-flex justify-content-center mt-4 mb-4" style="height: 200px;" >
-                        <label for="InputProfilePicture" style="display: block; height: 100%; cursor: pointer; ">
+                    
+                    <div class="form-group d-flex  mt-4 mb-4" style="height: 200px; max-height: 200px; text-align: center;" >
+                        <label for="InputProfilePicture" style="display: block; cursor: pointer; ">
                             <input type="file" accept="image/*" name="image" id="InputProfilePicture" style="display: none;">
                             
-                            <img id="displayImage" src="assets/images/add-image.png"  style="cursor: pointer; border-radius: 50%; backdrop-filter: blur(50px); background-color: rgba(0, 0, 0, 0); object-fit: contain; height: 100%; width: 100%; vertical-align: middle;" title="Profile Picture. Limited to 1MB.">
+                            <img id="displayImage" src="assets/images/add-image.png"  style="cursor: pointer; border-radius: 50%; backdrop-filter: blur(50px); background-color: rgba(0, 0, 0, 0); object-fit: contain; width: 100%; max-width: 200px ;vertical-align: middle;" title="Optional Profile Picture. Limited to 1MB.">
                         </label>
                     </div>
-
+                    
                     <div class="form-group">
                       <label for="InputUsername">Username</label>
                       <input type="text" class="form-control bg-transparent" name="uname" id="InputUsername" aria-describedby="emailHelp" placeholder="Enter username" required>
-                    </div>
-
+                      <label for="" class="text-danger mt-2">* Must be atleast 8 characters. <br>* Must not contain special characters.</label>
+                      </div>
+                    
                     <div class="form-group">
                         <label for="InputUsername">Name</label>
                         <input type="text" class="form-control bg-transparent" name="name" id="InputName" aria-describedby="emailHelp" placeholder="Enter Name" required>
@@ -64,8 +87,10 @@ if (isset($_SESSION['user_id'])) {
                     <div class="form-group">
                         <label for="InputPassword">Password</label>
                         <input type="password" class="form-control bg-transparent" id="InputPassword" name="pword" placeholder="Enter Password" required>
+                        <label for="" class="text-danger mt-2">* Must be atleast 8 characters. <br>* Must not contain special characters.</label>
                     </div>
-
+                    
+                    
                     <div class="form-group">
                         <label for="InputPassword">Repeat Password</label>
                         <input type="password" class="form-control bg-transparent" id="InputRepeatPassword" name="rpword" placeholder="Repeat Password" required>
