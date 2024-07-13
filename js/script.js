@@ -1,4 +1,4 @@
-var secondsToSave = 3;
+var secondsToSave = 0;
 
 var notes;
 const noteCardHolder1 = document.getElementById('note-card-holder-1');
@@ -111,6 +111,18 @@ function checkIfNoNotes(){
 
 
 }
+function refreshNotesUI() {
+
+    clearNoteCards();
+    fetchNotes("index");
+}
+
+function clearNoteCards() {
+    noteCardHolder1.innerHTML = '';
+    noteCardHolder2.innerHTML = '';
+    noteCardHolder3.innerHTML = '';
+    noteCardHolder4.innerHTML = '';
+}
 
 function addNewNote(){
     
@@ -204,11 +216,14 @@ function deleteNote(noteCard) {
         
         noteCard.setAttribute("is-archived", this.responseText);
         noteCard.querySelector('.recover-holder').classList.remove("hide");
+        refreshNotesUI();
     };
     
     xhr.send(formData);
     checkIfNoNotes();
 }
+
+
 
 function recoverNote(noteCard) {
     noteCard.classList.toggle('hide');
