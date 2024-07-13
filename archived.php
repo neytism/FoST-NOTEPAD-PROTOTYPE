@@ -65,6 +65,14 @@
                 </div>
 
             </div>
+
+            <div id="loading-notes" class=" col-lg-12 col-md-12 mb-1 mb-lg-0 hide">
+                
+                <div  class="w-100 col-lg-12 shadow-1-strong rounded-card mb-4 new-note inactive d-flex justify-content-center align-items-center " style="text-align: center;">
+                    <div class="loader"></div>
+                </div>
+            
+            </div>
             
             <div class="col-lg-3 col-md-12 mb-0 mb-lg-0" id="note-card-holder-1">
 

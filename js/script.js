@@ -1,4 +1,5 @@
-var secondsToSave = 0;
+var secondsToSave = 5;
+var currentIndex = 0;
 
 var notes;
 const noteCardHolder1 = document.getElementById('note-card-holder-1');
@@ -6,9 +7,8 @@ const noteCardHolder2 = document.getElementById('note-card-holder-2');
 const noteCardHolder3 = document.getElementById('note-card-holder-3');
 const noteCardHolder4 = document.getElementById('note-card-holder-4');
 const noNotesFound = document.getElementById('no-notes-found');
+const loadingNotes = document.getElementById('loading-notes');
 
-
-checkIfNoNotes(); // check on load
 
 //pamagat is title, but is taken so fuck it
 function generateNewNoteCard(id, pamagat, isArchived){
@@ -16,6 +16,9 @@ function generateNewNoteCard(id, pamagat, isArchived){
     noteCard.classList.add('w-100', 'shadow-1-strong', 'rounded-card', 'mb-4', 'note-card');
     noteCard.setAttribute("card-id", id );
     noteCard.setAttribute("is-archived", isArchived );
+    noteCard.setAttribute("index", currentIndex );
+    noteCard.setAttribute("changed", "false" );
+    currentIndex++;
     
     const deleteHolder = document.createElement('div');
     deleteHolder.classList.add('delete-holder');
@@ -54,9 +57,16 @@ function generateNewNoteCard(id, pamagat, isArchived){
     const title = document.createElement('div');
     
     const titleSpan = document.createElement('span');
-    titleSpan.contentEditable = true;
     titleSpan.classList.add('note-title');
     titleSpan.textContent = pamagat;
+    if(isArchived == "true"){
+        if(pamagat == ""){
+            titleSpan.textContent = "No Title";
+        }
+    } else{
+        titleSpan.contentEditable = true;
+    }
+    
     
     title.appendChild(titleSpan);
     
@@ -66,9 +76,13 @@ function generateNewNoteCard(id, pamagat, isArchived){
     const list = document.createElement('li');
     list.classList.add('list-group-item', 'bg-transparent', 'border-0', 'inactive');
     
+    
     const button = document.createElement('button');
     button.classList.add('btn', 'btn-dark', 'bg-transparent', 'border-0', 'p-0', 'new-list');
     button.innerHTML = "&nbsp; +  Add new item to list. &nbsp;"
+    if(isArchived == "true"){
+        button.classList.add('hide');
+    }
     button.addEventListener('click', () => addNewListItem(noteCard,"","true"));
     
     list.appendChild(button);
@@ -77,12 +91,17 @@ function generateNewNoteCard(id, pamagat, isArchived){
     noteCard.appendChild(recoverHolder);
     noteCard.appendChild(title);
     noteCard.appendChild(listHolder);
+
+    if(isArchived == "true"){
+        noteCard.style.pointerEvents = 'none';
+        deleteHolder.style.pointerEvents = 'auto';
+        recoverHolder.style.pointerEvents = 'auto';
+    }
+    
     
     noteCardHolder1.insertBefore( noteCard, noteCardHolder1.firstChild);
     
     if(isMobileDevice()) {
-        console.log("mobile");
-        checkIfNoNotes();
         return noteCard;
     };
     
@@ -95,7 +114,6 @@ function generateNewNoteCard(id, pamagat, isArchived){
         }
         });
     
-    checkIfNoNotes();
     return noteCard;
 }
 
@@ -111,22 +129,12 @@ function checkIfNoNotes(){
 
 
 }
-function refreshNotesUI() {
-
-    clearNoteCards();
-    fetchNotes("index");
-}
-
-function clearNoteCards() {
-    noteCardHolder1.innerHTML = '';
-    noteCardHolder2.innerHTML = '';
-    noteCardHolder3.innerHTML = '';
-    noteCardHolder4.innerHTML = '';
-}
 
 function addNewNote(){
     
-    addTimer(generateNewNoteCard(-1,"", "true")); // fix
+    var newNoteCard = generateNewNoteCard(-1,"", "false");
+    addTimer(newNoteCard); // fix
+    newNoteCard.setAttribute("changed", "true" );
     
     checkIfNoNotes();
 }
@@ -136,18 +144,64 @@ function isMobileDevice() {
     return window.innerWidth <= 990;
 }
 
+var wasResized = false;
+var isMobile = isMobileDevice();
+
+window.addEventListener("resize", function() {
+    if (!wasResized && isMobile) {
+        if (window.innerWidth > 990) {
+
+            console.log("Desktop");
+
+            const noteCards = document.querySelectorAll('.note-card');
+
+            currentHolderIndex = 0;
+    
+            noteCards.forEach(noteCard => {
+
+                const holders = [noteCardHolder1, noteCardHolder2, noteCardHolder3, noteCardHolder4];
+                
+                // Calculate the index of the next holder
+                const nextHolderIndex = (currentHolderIndex + 1) % holders.length;
+
+                currentHolderIndex++;
+                
+                // Move the note card to the next holder
+                holders[nextHolderIndex].appendChild(noteCard);
+            });
+
+            wasResized = true;
+            isMobile = false;
+        }
+        
+    }
+})
+
 function moveToNextHolder(noteCard) {
     const holders = [noteCardHolder1, noteCardHolder2, noteCardHolder3, noteCardHolder4];
-  
+    
     // Find the index of the current holder
     const currentHolderIndex = holders.findIndex(holder => holder.contains(noteCard));
-  
+    
     // Calculate the index of the next holder
     const nextHolderIndex = (currentHolderIndex + 1) % holders.length;
-  
+    
     // Move the note card to the next holder
     holders[nextHolderIndex].appendChild(noteCard);
-  }
+}
+
+function moveToPreviousHolder(noteCard) {
+    const holders = [noteCardHolder1, noteCardHolder2, noteCardHolder3, noteCardHolder4];
+
+    // Find the index of the current holder
+    const currentHolderIndex = holders.findIndex(holder => holder.contains(noteCard));
+
+    // Calculate the index of the previous holder
+    const previousHolderIndex = (currentHolderIndex - 1 + holders.length) % holders.length;
+
+    // Move the note card to the previous holder
+    holders[previousHolderIndex].appendChild(noteCard);
+}
 
 
 function addNewListItem(noteCard, content, isActive) {
@@ -175,14 +229,17 @@ function addNewListItem(noteCard, content, isActive) {
     textSpan.classList.add('text-after-checkbox');
     textSpan.contentEditable = 'true';
     textSpan.innerHTML = content;
-    textSpan.addEventListener('keydown', (event) =>removeList(event, newItem, textSpan) );
+    textSpan.addEventListener('keydown', (event) =>removeList(event, newItem, textSpan, noteCard) );
     
     newItem.appendChild(checkbox);
     newItem.appendChild(textSpan);
     
     addButton.parentNode.parentNode.insertBefore(newItem, addButtonParent);
     
-    textSpan.focus();
+    if(noteCard.getAttribute('is-archived') == "false"){
+        textSpan.focus();
+    }
+    
 }
 
 
@@ -196,8 +253,9 @@ function toggleCheckedClass(checkbox) {
     }
 }
 
-function removeList(event, item, span) {
+function removeList(event, item, span, noteCard) {
     if (span.textContent.trim() === '' && event.key === 'Backspace') item.classList.toggle('hide');
+    noteCard.setAttribute('changed','true');
 }
 
 function deleteNote(noteCard) {
@@ -205,6 +263,7 @@ function deleteNote(noteCard) {
     
     var isArchived = noteCard.getAttribute("is-archived");
     var id = noteCard.getAttribute("card-id");
+    var deleteIndex = parseInt(noteCard.getAttribute('index'));
     
     let formData = new FormData();
     formData.append('id', id);
@@ -216,11 +275,29 @@ function deleteNote(noteCard) {
         
         noteCard.setAttribute("is-archived", this.responseText);
         noteCard.querySelector('.recover-holder').classList.remove("hide");
-        refreshNotesUI();
+        //refreshNotesUI();
     };
-    
+
     xhr.send(formData);
+
     checkIfNoNotes();
+
+    if(isMobileDevice()) {
+        return noteCard;
+    };
+
+    const noteCards = document.querySelectorAll('.note-card');
+    
+    noteCards.forEach(oldNoteCard => {
+        if(oldNoteCard != noteCard){
+            //moveToOtherHolder(noteCard);
+            const index = parseInt(oldNoteCard.getAttribute('index'));
+            if(index < deleteIndex){
+                moveToPreviousHolder(oldNoteCard)
+            }
+        }
+        });
+   
 }
 
 
@@ -229,6 +306,7 @@ function recoverNote(noteCard) {
     noteCard.classList.toggle('hide');
     
     var id = noteCard.getAttribute("card-id");
+    var recoverIndex = parseInt(noteCard.getAttribute('index'));
     
     let formData = new FormData();
     formData.append('id', id);
@@ -242,16 +320,39 @@ function recoverNote(noteCard) {
         noteCard.querySelector('.recover-holder').classList.add("hide");
     };
     
-    xhr.send(formData);   
+    xhr.send(formData);
+
     checkIfNoNotes();
+
+    if(isMobileDevice()) {
+        return noteCard;
+    };
+
+    const noteCards = document.querySelectorAll('.note-card');
+    
+    noteCards.forEach(oldNoteCard => {
+        if(oldNoteCard != noteCard){
+            //moveToOtherHolder(noteCard);
+            const index = parseInt(oldNoteCard.getAttribute('index'));
+            if(index < recoverIndex){
+                moveToPreviousHolder(oldNoteCard)
+            }
+        }
+        });
+    
+    
 }
+
+
 
 //onload, called on specific pages
 function fetchNotes(pageName) {
+    loadingNotes.classList.remove('hide');
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'getNotesAction.php', true);
     xhr.onload = function () {
         //console.log(this.responseText);
+        loadingNotes.classList.add('hide');
         if (this.status === 200) {
             notes = JSON.parse(this.responseText);
             notes.forEach(function (note) {
@@ -290,6 +391,8 @@ function fetchNotes(pageName) {
                 }
             
             });
+
+            checkIfNoNotes();
         
         } else {
             console.error('Error fetching notes:', this.statusText);
@@ -312,52 +415,14 @@ function addTimer(noteCard) {
     function startSaveTimer() {
         saveTimer = setTimeout(function () {
             
-            var listItemElements = noteCard.querySelectorAll('.list-group-item:not(.inactive)');
-            var listItems = [];
-
-            listItemElements.forEach(function (listItem) {
-                var span = listItem.querySelector('span');
-                var item = span.textContent.trim();
-
-                var isChecked;
-                if (listItem.classList.contains('checked')) {
-                    isChecked = 'false';
-                } else {
-                    isChecked = 'true';
-                }
-
-                listItems.push([item, isChecked]);
-            });
-            
-            let id = noteCard.getAttribute('card-id');
-            let title = titleSpan.textContent;
-            let content = compileString(listItems);
-            let isArchived = "false";
-            
-            
-            
-            let formData = new FormData();
-            formData.append('id', id);
-            formData.append('title', title);
-            formData.append('content', content);
-            formData.append('isArchived', isArchived);
-            
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'updateNoteAction.php', true);
-            xhr.onload = function () {
-                
-                noteCard.setAttribute("card-id", this.responseText );
-                console.log("Saved note with ID: " + noteCard.getAttribute('card-id'));
-            };
-            
-            xhr.send(formData);
-
+            saveNote(noteCard);
             
         }, (secondsToSave * 1000)); 
     }
 
     function resetSaveTimer() {
         clearTimeout(saveTimer);
+        noteCard.setAttribute("changed", "true" );
         startSaveTimer();
     }
 
@@ -391,4 +456,65 @@ function compileString(val){
       
 
     return text;
+}
+
+window.addEventListener("beforeunload", function() {
+    const noteCards = document.querySelectorAll('.note-card');
+    
+    noteCards.forEach(noteCard => {
+        var isChanged = noteCard.getAttribute('changed');
+
+        if(isChanged == "true"){
+            
+            saveNote(noteCard);
+        }
+        });
+    
+});
+
+function saveNote(noteCard){
+
+    var titleSpan = noteCard.querySelector('.note-title');
+            
+    var listItemElements = noteCard.querySelectorAll('.list-group-item:not(.inactive)');
+    var listItems = [];
+    
+    listItemElements.forEach(function (listItem) {
+        var span = listItem.querySelector('span');
+        var item = span.textContent.trim();
+        
+        var isChecked;
+        if (listItem.classList.contains('checked')) {
+            isChecked = 'false';
+        } else {
+            isChecked = 'true';
+        }
+
+        listItems.push([item, isChecked]);
+    });
+    
+    let id = noteCard.getAttribute('card-id');
+    let title = titleSpan.textContent;
+    let content = compileString(listItems);
+    let isArchived = "false";
+    
+    
+    
+    let formData = new FormData();
+    formData.append('id', id);
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('isArchived', isArchived);
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'updateNoteAction.php', true);
+    xhr.onload = function () {
+        
+        noteCard.setAttribute("card-id", this.responseText );
+        console.log("Saved note with ID: " + noteCard.getAttribute('card-id'));
+        noteCard.setAttribute("changed", "false" );
+    };
+    
+    xhr.send(formData);
+
 }
