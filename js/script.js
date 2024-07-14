@@ -1,4 +1,4 @@
-var secondsToSave = 5;
+var secondsToSave = 3;
 var currentIndex = 0;
 
 var notes;
@@ -35,9 +35,18 @@ function generateNewNoteCard(id, pamagat, isArchived){
     const deleteIcon = document.createElement('i');
     deleteIcon.classList.add('bi', 'bi-trash3', 'button-i');
     
+    const deleteSpinnerHolder = document.createElement('button');
+    deleteSpinnerHolder.classList.add('delete-spinner','hide');
+
+    const deleteSpinner = document.createElement('i');
+    deleteSpinner.classList.add('bi', 'bi-arrow-repeat', 'button-i', 'spinner');
+    
     deleteButton.appendChild(deleteIcon);
     deleteHolder.appendChild(deleteButton);
-
+    
+    deleteHolder.appendChild(deleteSpinnerHolder);
+    deleteSpinnerHolder.appendChild(deleteSpinner);
+    
     const recoverHolder = document.createElement('div');
     recoverHolder.classList.add('recover-holder');
     recoverHolder.classList.add('hide');
@@ -50,9 +59,18 @@ function generateNewNoteCard(id, pamagat, isArchived){
     
     const recoverIcon = document.createElement('i');
     recoverIcon.classList.add('bi', 'bi-arrow-return-left', 'button-i');
-
+    
+    const recoverSpinnerHolder = document.createElement('button');
+    recoverSpinnerHolder.classList.add('recover-spinner', 'hide');
+    
+    const recoverSpinner = document.createElement('i');
+    recoverSpinner.classList.add('bi', 'bi-arrow-repeat', 'button-i', 'spinner');
+    
     recoverButton.appendChild(recoverIcon);
     recoverHolder.appendChild(recoverButton);
+    
+    recoverSpinnerHolder.appendChild(recoverSpinner);
+    recoverHolder.appendChild(recoverSpinnerHolder);
     
     const title = document.createElement('div');
     
@@ -109,7 +127,6 @@ function generateNewNoteCard(id, pamagat, isArchived){
     
     noteCards.forEach(oldNoteCard => {
         if(oldNoteCard != noteCard){
-            //moveToOtherHolder(noteCard);
             moveToNextHolder(oldNoteCard)
         }
         });
@@ -133,8 +150,10 @@ function checkIfNoNotes(){
 function addNewNote(){
     
     var newNoteCard = generateNewNoteCard(-1,"", "false");
-    addTimer(newNoteCard); // fix
-    newNoteCard.setAttribute("changed", "true" );
+    addTimer(newNoteCard);
+    saveNote(newNoteCard);
+
+
     
     checkIfNoNotes();
 }
@@ -176,7 +195,6 @@ window.addEventListener("resize", function() {
         
     }
 })
-
 function moveToNextHolder(noteCard) {
     const holders = [noteCardHolder1, noteCardHolder2, noteCardHolder3, noteCardHolder4];
     
@@ -192,17 +210,16 @@ function moveToNextHolder(noteCard) {
 
 function moveToPreviousHolder(noteCard) {
     const holders = [noteCardHolder1, noteCardHolder2, noteCardHolder3, noteCardHolder4];
-
+    
     // Find the index of the current holder
     const currentHolderIndex = holders.findIndex(holder => holder.contains(noteCard));
-
+    
     // Calculate the index of the previous holder
     const previousHolderIndex = (currentHolderIndex - 1 + holders.length) % holders.length;
-
+    
     // Move the note card to the previous holder
     holders[previousHolderIndex].appendChild(noteCard);
 }
-
 
 function addNewListItem(noteCard, content, isActive) {
     const addButton = noteCard.querySelector('.new-list');
@@ -259,7 +276,9 @@ function removeList(event, item, span, noteCard) {
 }
 
 function deleteNote(noteCard) {
-    noteCard.classList.toggle('hide');
+    stopTimer(noteCard);
+    noteCard.querySelector('.delete-button').classList.add("hide");
+    noteCard.querySelector('.delete-spinner').classList.remove("hide");
     
     var isArchived = noteCard.getAttribute("is-archived");
     var id = noteCard.getAttribute("card-id");
@@ -271,10 +290,26 @@ function deleteNote(noteCard) {
     
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'archiveNoteAction.php', true);
+
     xhr.onload = function () {
-        
-        noteCard.setAttribute("is-archived", this.responseText);
+        noteCard.classList.toggle('hide');
         noteCard.querySelector('.recover-holder').classList.remove("hide");
+        noteCard.setAttribute("is-archived", "true");
+
+        if(isMobileDevice()) {
+            return noteCard;
+        };
+    
+        const noteCards = document.querySelectorAll('.note-card');
+        
+        noteCards.forEach(oldNoteCard => {
+            if(oldNoteCard != noteCard){
+                const index = parseInt(oldNoteCard.getAttribute('index'));
+                if(index < deleteIndex){
+                    moveToPreviousHolder(oldNoteCard)
+                }
+            }
+            });
         //refreshNotesUI();
     };
 
@@ -282,28 +317,16 @@ function deleteNote(noteCard) {
 
     checkIfNoNotes();
 
-    if(isMobileDevice()) {
-        return noteCard;
-    };
-
-    const noteCards = document.querySelectorAll('.note-card');
     
-    noteCards.forEach(oldNoteCard => {
-        if(oldNoteCard != noteCard){
-            //moveToOtherHolder(noteCard);
-            const index = parseInt(oldNoteCard.getAttribute('index'));
-            if(index < deleteIndex){
-                moveToPreviousHolder(oldNoteCard)
-            }
-        }
-        });
    
 }
 
 
 
 function recoverNote(noteCard) {
-    noteCard.classList.toggle('hide');
+    stopTimer(noteCard);
+    noteCard.querySelector('.recover-button').classList.add("hide");
+    noteCard.querySelector('.recover-spinner').classList.remove("hide");
     
     var id = noteCard.getAttribute("card-id");
     var recoverIndex = parseInt(noteCard.getAttribute('index'));
@@ -316,29 +339,31 @@ function recoverNote(noteCard) {
     xhr.open('POST', 'archiveNoteAction.php', true);
     xhr.onload = function () {
         
-        noteCard.setAttribute("is-archived", this.responseText);
+        noteCard.classList.toggle('hide');
+        noteCard.setAttribute("is-archived", "false");
         noteCard.querySelector('.recover-holder').classList.add("hide");
+
+        if(isMobileDevice()) {
+            return noteCard;
+        };
+        
+        const noteCards = document.querySelectorAll('.note-card');
+        
+        noteCards.forEach(oldNoteCard => {
+            if(oldNoteCard != noteCard){
+                const index = parseInt(oldNoteCard.getAttribute('index'));
+                if(index < recoverIndex){
+                    moveToPreviousHolder(oldNoteCard)
+                }
+            }
+            });
+        
     };
     
     xhr.send(formData);
 
     checkIfNoNotes();
 
-    if(isMobileDevice()) {
-        return noteCard;
-    };
-
-    const noteCards = document.querySelectorAll('.note-card');
-    
-    noteCards.forEach(oldNoteCard => {
-        if(oldNoteCard != noteCard){
-            //moveToOtherHolder(noteCard);
-            const index = parseInt(oldNoteCard.getAttribute('index'));
-            if(index < recoverIndex){
-                moveToPreviousHolder(oldNoteCard)
-            }
-        }
-        });
     
     
 }
@@ -396,6 +421,7 @@ function fetchNotes(pageName) {
         
         } else {
             console.error('Error fetching notes:', this.statusText);
+            checkIfNoNotes();
         }
     };
     
@@ -411,7 +437,7 @@ function addTimer(noteCard) {
     var textAfterCheckboxes = noteCard.querySelectorAll('.text-after-checkbox');
     var checkboxes = noteCard.querySelectorAll('.form-check-input');
     var saveTimer;
-
+    
     function startSaveTimer() {
         saveTimer = setTimeout(function () {
             
@@ -419,29 +445,30 @@ function addTimer(noteCard) {
             
         }, (secondsToSave * 1000)); 
     }
-
+    
     function resetSaveTimer() {
         clearTimeout(saveTimer);
         noteCard.setAttribute("changed", "true" );
         startSaveTimer();
     }
-
+    
     titleSpan.addEventListener('input', resetSaveTimer);
     addButton.addEventListener('click', resetSaveTimer);
-
+     
     textAfterCheckboxes.forEach(function (span) {
         span.addEventListener('keyup', resetSaveTimer);
     });
-
+    
     checkboxes.forEach(function (checkbox) {
         checkbox.addEventListener('change', resetSaveTimer);
     });
-
-    if( noteCard.getAttribute('card-id') == '-1'){
-        startSaveTimer();
-    }
     
 };
+
+function stopTimer(noteCard) {
+    var saveTimer = noteCard.saveTimer;
+    clearTimeout(saveTimer);
+  }
 
 function compileString(val){
     var text = "";
@@ -473,7 +500,8 @@ window.addEventListener("beforeunload", function() {
 });
 
 function saveNote(noteCard){
-
+    noteCard.querySelector('.delete-button').classList.add("hide");
+    noteCard.querySelector('.delete-spinner').classList.remove("hide");
     var titleSpan = noteCard.querySelector('.note-title');
             
     var listItemElements = noteCard.querySelectorAll('.list-group-item:not(.inactive)');
@@ -496,7 +524,6 @@ function saveNote(noteCard){
     let id = noteCard.getAttribute('card-id');
     let title = titleSpan.textContent;
     let content = compileString(listItems);
-    let isArchived = "false";
     
     
     
@@ -504,7 +531,6 @@ function saveNote(noteCard){
     formData.append('id', id);
     formData.append('title', title);
     formData.append('content', content);
-    formData.append('isArchived', isArchived);
     
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'updateNoteAction.php', true);
@@ -512,6 +538,8 @@ function saveNote(noteCard){
         
         noteCard.setAttribute("card-id", this.responseText );
         console.log("Saved note with ID: " + noteCard.getAttribute('card-id'));
+        noteCard.querySelector('.delete-button').classList.remove("hide");
+         noteCard.querySelector('.delete-spinner').classList.add("hide");
         noteCard.setAttribute("changed", "false" );
     };
     

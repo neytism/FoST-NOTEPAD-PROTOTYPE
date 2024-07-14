@@ -338,7 +338,6 @@ span[contenteditable]:empty:focus::before {
     border: none !important;
 }
 
-/* HTML: <div class="loader"></div> */
 .loader {
   height: 30px;
   aspect-ratio: 2.5;
@@ -357,6 +356,12 @@ span[contenteditable]:empty:focus::before {
   83.33% {background-position: calc(0*100%/3) 50% ,calc(1*100%/3) 50% ,calc(2*100%/3) 50% ,calc(3*100%/3) 100%}
   100%   {background-position: calc(0*100%/3) 50% ,calc(1*100%/3) 50% ,calc(2*100%/3) 50% ,calc(3*100%/3) 50% }
 }
+
+.spinner {
+  animation: l3 1s infinite linear;
+}
+
+@keyframes l3 {to{transform: rotate(1turn)}}
 
 @media (max-width: 990px) {
 

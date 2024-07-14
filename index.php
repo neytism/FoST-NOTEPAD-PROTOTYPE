@@ -114,12 +114,13 @@ if (isset($_GET['logout'])) {
                     <div class="delete-holder">
                         <button class="trash-button">
                             <i class="bi bi-trash3 button-i"></i>
+                            <i id="delete-spinner" class="bi bi-arrow-repeat button-i delete-spinner"></i>
                         </button>
                     </div>
-
+                    
                     <div class="recover-holder hide">
                         <button class="recover-button">
-                            <i class="bi bi-arrow-return-left button-i"></i>
+                            <i id="recover-spinner" class="bi bi-arrow-return-left button-i"></i>
                         </button>
                     </div>
                     
@@ -127,7 +128,7 @@ if (isset($_GET['logout'])) {
                     <div><span class="note-title" contenteditable="true"></span></div>
 
                     <ul class="list-group bg-transparent">
-
+                        
                         <li class="list-group-item bg-transparent border-0">
                           <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
                           <span class="text-after-checkbox" contenteditable="true">Cras justo odio</span>
