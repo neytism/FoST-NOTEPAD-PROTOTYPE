@@ -10,102 +10,11 @@ $sql = "SELECT * FROM users WHERE id = '$_SESSION[user_id]'";
 $result = $conn->query($sql);
 
 while ($row = $result->fetch_assoc()) {
-
+    
     $username = $row["username"];
     $name = $row["name"];
     $bio = $row["bio"];
     $image_name = $row["image_name"];
-
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    include 'config.php';
-
-    $errors = array(
-        'name' => '',
-        'bio' => '',
-        'image' => ''
-    );
-
-    $name = $_POST['name'];
-    $bio = $_POST['bio'];
-    $imageChanged = false;
-
-    if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
-        $image = $_FILES['image'];
-        $imageChanged = true;
-    }
-
-    $name = ucfirst($name);
-    if (empty($name)) {
-        $errors['name'] = '-Name is required';
-    } else {
-        if (strlen($name) > 200) {
-            $errors['name'] = '-Invalid, too long.';
-        }
-    }
-
-    if (!empty($bio)) {
-        if (strlen($bio) > 500) {
-            $errors['bio'] = '-Invalid, too long.';
-        }
-    }
-
-
-    if($imageChanged){
-
-        if (!empty($image['name'])) {
-            $base_dir = "assets/images/";
-            $target_dir = "" . $base_dir;
-            $target_file = $target_dir . basename($image["name"]);
-            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-            $newFileName = $_SESSION['user_id'] . "_dp" . "." . $imageFileType;
-            $newFilePath = $target_dir . $newFileName;
-            $relativeFilePath = $base_dir . $newFileName;
-    
-    
-            if ($image["size"] > 5000000) {
-                $errors['image'] = '-File is too large';
-            }
-    
-            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-                $errors['image'] = '-Only JPG, JPEG, PNG & GIF files are allowed';
-            }
-    
-            if (!array_filter($errors)) {
-                if (move_uploaded_file($image["tmp_name"], $newFilePath)) {
-                    $image = $newFileName;
-                } else {
-                    $errors['image'] = '-There was an error uploading your file';
-                }
-            }
-        } else {
-            $image = "add-image.png";
-        }
-
-    }
-    
-
-
-    if (array_filter($errors)) {
-        //echo implode("<br>", array_filter($errors));
-    } else {
-        
-        $name = mysqli_real_escape_string($conn, $name);
-        $bio = mysqli_real_escape_string($conn, $bio);
-        
-        $sql = "UPDATE users SET name='$name', bio = '$bio' WHERE id='$_SESSION[user_id]'";
-        
-        mysqli_query($conn, $sql);
-
-        if($imageChanged){
-            $sql = "UPDATE users SET image_name='$image' WHERE id='$_SESSION[user_id]'";
-            mysqli_query($conn, $sql);
-        }
-
-        echo "success";
-
-    }
 
 }
 
@@ -206,10 +115,11 @@ $conn->close();
                     </div>
                 
                     <div class="form-group">
-                      <label for="InputUsername">Username</label>
-                      <input type="text" class="form-control bg-transparent" name="uname" id="InputUsername" aria-describedby="emailHelp" placeholder="Enter username" value="<?php echo htmlspecialchars($username) ?>" readonly required>
+                      <label for="">Username</label><br>
+                      <!-- <label title="Can't edit" for="" style="margin-top:10px;">  &nbsp; &nbsp; <?php echo htmlspecialchars($username) ?></label> -->
+                      <input type="text" class="form-control bg-transparent" name="uname" id="InputUsername" aria-describedby="emailHelp" placeholder="Enter username" value="<?php echo htmlspecialchars($username) ?>" required>
                     </div>
-
+                    
                     <div class="form-group">
                         <label for="InputUsername">Name</label>
                         <input type="text" class="form-control bg-transparent" name="name" id="InputName" aria-describedby="emailHelp" placeholder="Enter Name" value="<?php echo htmlspecialchars($name) ?>" required>
@@ -219,7 +129,7 @@ $conn->close();
                         <label for="InputUsername">Bio</label>
                         <textarea class="form-control bg-transparent" aria-label="With textarea" name="bio" id="InputBio" placeholder="Enter Bio" ><?php echo htmlspecialchars($bio) ?></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary col-12" onclick="checkUpdate(event)">Save Changes</button>
+                    <button type="submit" class="btn btn-primary col-12" onclick="checkUpdate(event, this)">Save Changes</button>
                     <label class="mt-3 d-flex text-danger" id="warningText" style="display: none !important; text-align:center;"></label>
                   </form>
             </div>
